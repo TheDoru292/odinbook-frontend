@@ -22,13 +22,24 @@ const comments = [
   },
 ];
 
+const friends = [
+  {
+    user: "Ey",
+  },
+  {
+    user: "PowerPlay",
+  },
+  { user: "Hey" },
+  { user: "Test" },
+];
+
 export default function Homepage() {
   return (
-    <div className="w-full h-screen flex flex-col">
+    <>
       <Header currentPage="home" />
-      <main className="text-stone-200 flex flex-grow h-100 bg-stone-900">
+      <div className="relative text-stone-200 flex bg-stone-900">
         <LeftSidebar />
-        <div className="flex flex-col gap-4 py-4 px-24 w-6/12 flex-grow ">
+        <main className="flex-grow z-1 flex flex-col gap-4 py-4 px-28 w-6/12">
           <MainPagePost />
           <Post user="test" postData={data} likes={likes} comments={comments} />
           <Post
@@ -41,11 +52,29 @@ export default function Homepage() {
             likes={{ count: 690 }}
             comments={[]}
           />
-        </div>
-        <div className="p-4 w-3/12 flex-grow">
-          <RightSidebar />
-        </div>
-      </main>
-    </div>
+          <Post
+            user="User"
+            postData={{
+              posted_on: new Date(),
+              content: "i am currently watching Black Clover",
+            }}
+            likes={{ count: 874555 }}
+            comments={[
+              {
+                user: "PowerPlay",
+                content: "Hope you enjoy it!",
+                commented_on: new Date(),
+              },
+              {
+                user: "Naruto Fan 69",
+                content: "Watch Naruto instead smh",
+                commented_on: new Date(),
+              },
+            ]}
+          />
+        </main>
+        <RightSidebar friends={friends} />
+      </div>
+    </>
   );
 }
