@@ -34,12 +34,12 @@ export default function NotLoggedMainPage() {
     }
 
     localStorage.setItem("token", data.token);
-    router.reload(window.location.pathname);
+    router.push("/");
   }
 
   return (
-    <>
-      <main className="bg-gray-100 flex justify-center items-center grow gap-24">
+    <div className="flex flex-col h-screen">
+      <main className="flex-grow bg-gray-100 flex justify-center items-center gap-24">
         <div>
           <h1 className="text-5xl mb-2">Odin-book</h1>
           <p className="text-lg">
@@ -105,6 +105,6 @@ export default function NotLoggedMainPage() {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
