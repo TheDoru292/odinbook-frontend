@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 function ShowOptions() {
   return (
@@ -11,6 +12,35 @@ function ShowOptions() {
 
 export default function Header({ currentPage }) {
   const [accountOptions, setAccountOptions] = useState(false);
+  const [logged, setLogged] = useState();
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchData() {
+      const token = localStorage.getItem("token");
+
+      const bodyData = {
+        token: token || "",
+      };
+
+      const data = await fetch("http://localhost:3000/api/auth/test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      }).then((res) => res.json());
+
+      if (data.code == 400) {
+        setLogged(false);
+        router.push("/");
+      } else {
+        setLogged(true);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const homeSrc = currentPage == "home" ? "home-blue.svg" : "home.svg";
   const accountSrc =
@@ -27,7 +57,7 @@ export default function Header({ currentPage }) {
   }
 
   return (
-    <header className="flex py-2 px-3 bg-stone-800 border-b-2 border-stone-700">
+    <header className="z-10 sticky h-[64px] top-0 flex py-2 px-3 bg-stone-800 border-b-2 border-stone-700">
       <div className="flex flex-grow basis-px">
         <div className="rounded-full w-11 h-11 bg-red-400 mr-2"></div>
         <input
