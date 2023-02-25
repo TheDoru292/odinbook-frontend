@@ -10,7 +10,7 @@ export default function Friend() {
       <Header currentPage="friends" />
       <main className="text-stone-200 flex flex-grow h-100 bg-stone-900">
         <div
-          style={{ height: "100vh", top: "62px" }}
+          style={{ height: "calc(100vh - 64px)", top: "62px" }}
           className="sticky h-100 w-2/12 py-2 px-3 bg-stone-800 flex flex-col gap-2"
         >
           <div>
