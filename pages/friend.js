@@ -11,7 +11,7 @@ export default function Friend() {
       <main className="text-stone-200 flex flex-grow h-100 bg-stone-900">
         <div
           style={{ height: "calc(100vh - 64px)", top: "62px" }}
-          className="sticky h-100 w-2/12 py-2 px-3 bg-stone-800 flex flex-col gap-2"
+          className="hidden lg:block sticky h-100 w-2/12 py-2 px-3 bg-stone-800 flex flex-col gap-2"
         >
           <div>
             <h2 className="text-xl font-bold">Friends</h2>
@@ -44,15 +44,23 @@ export default function Friend() {
             <div>
               <h2 className="text-xl font-bold">Outgoing Friend Requests</h2>
             </div>
-            <div className="flex">
+            <div className="justify-start flex flex-wrap gap-4">
               <div>
-                <div className="border-x border-t border-stone-700 w-48 h-48 bg-red-400 rounded-t-xl "></div>
+                <div className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "></div>
                 <div className="border-x border-b border-stone-700 p-3 bg-stone-800 flex gap-4 flex-col rounded-b-xl">
                   <p className="font-bold">User2</p>
                   <div className="flex flex-col gap-2">
-                    <button className="py-1 bg-sky-600 rounded-md">
-                      Confirm
+                    <button className="py-1 bg-stone-700 rounded-md">
+                      Remove
                     </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "></div>
+                <div className="border-x border-b border-stone-700 p-3 bg-stone-800 flex gap-4 flex-col rounded-b-xl">
+                  <p className="font-bold">User2</p>
+                  <div className="flex flex-col gap-2">
                     <button className="py-1 bg-stone-700 rounded-md">
                       Remove
                     </button>
@@ -64,9 +72,9 @@ export default function Friend() {
           <div className="border-t border-stone-700">
             <div className="flex flex-col gap-4">
               <h2 className="text-xl font-bold pt-6">Friend Requests</h2>
-              <div className="flex">
+              <div className="justify-start flex flex-wrap gap-4">
                 <div>
-                  <div className="border-x border-t border-stone-700 w-48 h-48 bg-red-400 rounded-t-xl "></div>
+                  <div className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "></div>
                   <div className="border-x border-b border-stone-700 p-3 bg-stone-800 flex gap-4 flex-col rounded-b-xl">
                     <p className="font-bold">User2</p>
                     <div className="flex flex-col gap-2">
@@ -85,9 +93,9 @@ export default function Friend() {
           <div className="border-t border-stone-700">
             <div className="flex flex-col gap-4">
               <h2 className="font-bold text-xl pt-6">You may know</h2>
-              <div className="flex">
+              <div className="justify-start flex flex-wrap gap-4">
                 <div>
-                  <div className="border-x border-t border-stone-700 w-48 h-48 bg-red-400 rounded-t-xl "></div>
+                  <div className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "></div>
                   <div className="border-x border-b border-stone-700 p-3 bg-stone-800 flex gap-4 flex-col rounded-b-xl">
                     <p className="font-bold">User2</p>
                     <div className="flex flex-col gap-2">
