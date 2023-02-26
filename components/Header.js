@@ -61,7 +61,7 @@ export default function Header({ currentPage }) {
       <div className="flex flex-grow basis-px">
         <div className="rounded-full w-11 h-11 bg-red-400 mr-2"></div>
         <input
-          className="border rounded-3xl px-4 bg-stone-700 border border-stone-700"
+          className="hidden md:block border rounded-3xl px-4 bg-stone-700 border border-stone-700"
           type="search"
           name="search"
           id="search"
