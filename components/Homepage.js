@@ -39,7 +39,7 @@ export default function Homepage() {
       <Header currentPage="home" />
       <div className="relative text-stone-200 flex bg-stone-900">
         <LeftSidebar />
-        <main className="flex-grow z-1 flex flex-col gap-4 py-4 px-28 w-6/12">
+        <main className="flex-grow z-1 flex flex-col gap-4 py-4 px-2 md:px-6 lg:px-28 w-6/12">
           <MainPagePost />
           <Post user="test" postData={data} likes={likes} comments={comments} />
           <Post

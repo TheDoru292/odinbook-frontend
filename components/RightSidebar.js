@@ -2,7 +2,7 @@ export default function RightSidebar({ friends }) {
   return (
     <div
       style={{ height: "calc(100vh - 64px)", top: "62px" }}
-      className="w-[320px] sticky flex flex-col pr-2"
+      className="hidden lg:block w-[320px] sticky flex flex-col pr-2"
     >
       <div className="p-2">
         <p className="font-bold text-lg">Contacts</p>
