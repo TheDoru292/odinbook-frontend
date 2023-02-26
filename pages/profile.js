@@ -1,14 +1,27 @@
 import Header from "@/components/Header";
 import MainPagePost from "@/components/PostDiv";
 import Post from "@/components/Post";
+import Menu from "@/components/Menu";
 import ProfileData from "@/components/ProfileData";
+import { useState } from "react";
 
 export default function Profile() {
+  const [openMenu, setOpenMenu] = useState(false);
+
+  function handleOpenMenu() {
+    if (openMenu == false) {
+      setOpenMenu(true);
+    } else {
+      setOpenMenu(false);
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      <Header setMenu={handleOpenMenu} />
       <main className="relative text-stone-200 flex flex-col flex-grow h-100 bg-stone-900">
         <ProfileData currentPage={"posts"} />
+        {openMenu == true ? <Menu></Menu> : <></>}
         <div className="px-2 xl:px-64 gap-4 flex">
           <aside className="hidden md:flex m-0 w-5/12 flex-col gap-4 py-4">
             <div className="bg-stone-800 rounded-xl px-4 py-3">

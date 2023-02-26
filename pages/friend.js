@@ -1,14 +1,27 @@
 import Header from "@/components/Header";
 import Head from "next/head";
+import Menu from "@/components/Menu";
+import { useState } from "react";
 
 export default function Friend() {
+  const [openMenu, setOpenMenu] = useState(false);
+
+  function handleOpenMenu() {
+    if (openMenu == false) {
+      setOpenMenu(true);
+    } else {
+      setOpenMenu(false);
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Head>
         <title>Friends - Odin-Book</title>
       </Head>
-      <Header currentPage="friends" />
+      <Header currentPage="friends" setMenu={handleOpenMenu} />
       <main className="text-stone-200 flex flex-grow h-100 bg-stone-900">
+        {openMenu == true ? <Menu></Menu> : <></>}
         <div
           style={{ height: "calc(100vh - 64px)", top: "62px" }}
           className="hidden lg:block sticky h-100 w-2/12 py-2 px-3 bg-stone-800 flex flex-col gap-2"

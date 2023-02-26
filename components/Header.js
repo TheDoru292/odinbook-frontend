@@ -2,16 +2,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-function ShowOptions() {
-  return (
-    <div className="absolute">
-      <p>User name</p>
-    </div>
-  );
-}
-
-export default function Header({ currentPage }) {
-  const [accountOptions, setAccountOptions] = useState(false);
+export default function Header({ currentPage, setMenu }) {
   const [logged, setLogged] = useState();
   const router = useRouter();
 
@@ -48,14 +39,6 @@ export default function Header({ currentPage }) {
       ? "account-multiple-blue.svg"
       : "account-multiple.svg";
 
-  function handleOptionsClick() {
-    if (accountOptions === false) {
-      setAccountOptions(true);
-    } else {
-      setAccountOptions(false);
-    }
-  }
-
   return (
     <header className="z-10 sticky h-[64px] top-0 flex py-2 px-3 bg-stone-800 border-b-2 border-stone-700">
       <div className="flex flex-grow basis-px">
@@ -83,10 +66,9 @@ export default function Header({ currentPage }) {
         </Link>
       </div>
       <div className="flex justify-end flex-grow basis-px">
-        <button onClick={handleOptionsClick}>
+        <button onClick={setMenu}>
           <div className="rounded-full w-11 h-11 bg-red-400"></div>
         </button>
-        {accountOptions == true ? <ShowOptions /> : <></>}
       </div>
     </header>
   );

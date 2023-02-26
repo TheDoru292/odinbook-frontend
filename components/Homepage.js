@@ -4,6 +4,8 @@ import LeftSidebar from "./LeftSideBar";
 import RightSidebar from "./RightSidebar";
 import MainPagePost from "./PostDiv";
 import Post from "./Post";
+import Menu from "./Menu";
+import { useState } from "react";
 
 const data = {
   posted_on: new Date(),
@@ -34,10 +36,21 @@ const friends = [
 ];
 
 export default function Homepage() {
+  const [openMenu, setOpenMenu] = useState(false);
+
+  function handleOpenMenu() {
+    if (openMenu == false) {
+      setOpenMenu(true);
+    } else {
+      setOpenMenu(false);
+    }
+  }
+
   return (
     <>
-      <Header currentPage="home" />
+      <Header currentPage="home" setMenu={handleOpenMenu} />
       <div className="relative text-stone-200 flex bg-stone-900">
+        {openMenu == true ? <Menu></Menu> : <></>}
         <LeftSidebar />
         <main className="flex-grow z-1 flex flex-col gap-4 py-4 px-2 md:px-6 lg:px-28 w-6/12">
           <MainPagePost />
@@ -73,7 +86,7 @@ export default function Homepage() {
             ]}
           />
         </main>
-        <RightSidebar friends={friends} />
+        <RightSidebar friends={friends} menuOpen={openMenu} />
       </div>
     </>
   );
