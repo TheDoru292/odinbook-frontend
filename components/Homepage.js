@@ -6,6 +6,7 @@ import MainPagePost from "./PostDiv";
 import Post from "./Post";
 import Menu from "./Menu";
 import { useState } from "react";
+import CreatePost from "./CreatePost";
 
 const data = {
   posted_on: new Date(),
@@ -37,6 +38,7 @@ const friends = [
 
 export default function Homepage() {
   const [openMenu, setOpenMenu] = useState(false);
+  const [openPost, setOpenPost] = useState(false);
 
   function handleOpenMenu() {
     if (openMenu == false) {
@@ -46,14 +48,27 @@ export default function Homepage() {
     }
   }
 
+  function handleOpenPost() {
+    if (openPost == false) {
+      setOpenPost(true);
+      document.querySelector("body").classList.remove("overflow-visible");
+      document.querySelector("body").classList.add("overflow-hidden");
+    } else {
+      setOpenPost(false);
+      document.querySelector("body").classList.remove("overflow-hidden");
+      document.querySelector("body").classList.add("overflow-visible");
+    }
+  }
+
   return (
     <>
       <Header currentPage="home" setMenu={handleOpenMenu} />
+      {openPost == true ? <CreatePost closePost={handleOpenPost} /> : <></>}
       <div className="relative text-stone-200 flex bg-stone-900">
         {openMenu == true ? <Menu></Menu> : <></>}
         <LeftSidebar />
         <main className="flex-grow z-1 flex flex-col gap-4 py-4 px-2 md:px-6 lg:px-28 w-6/12">
-          <MainPagePost />
+          <MainPagePost openPost={handleOpenPost} />
           <Post user="test" postData={data} likes={likes} comments={comments} />
           <Post
             user="PowerPlay"
