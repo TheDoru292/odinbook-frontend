@@ -2,11 +2,13 @@ import Header from "@/components/Header";
 import MainPagePost from "@/components/PostDiv";
 import Post from "@/components/Post";
 import Menu from "@/components/Menu";
+import CreatePost from "@/components/CreatePost";
 import ProfileData from "@/components/ProfileData";
 import { useState } from "react";
 
 export default function Profile() {
   const [openMenu, setOpenMenu] = useState(false);
+  const [openPost, setOpenPost] = useState(false);
 
   function handleOpenMenu() {
     if (openMenu == false) {
@@ -16,9 +18,22 @@ export default function Profile() {
     }
   }
 
+  function handleOpenPost() {
+    if (openPost == false) {
+      setOpenPost(true);
+      document.querySelector("body").classList.remove("overflow-visible");
+      document.querySelector("body").classList.add("overflow-hidden");
+    } else {
+      setOpenPost(false);
+      document.querySelector("body").classList.remove("overflow-hidden");
+      document.querySelector("body").classList.add("overflow-visible");
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header setMenu={handleOpenMenu} />
+      {openPost == true ? <CreatePost closePost={handleOpenPost} /> : <></>}
       <main className="relative text-stone-200 flex flex-col flex-grow h-100 bg-stone-900">
         <ProfileData currentPage={"posts"} />
         {openMenu == true ? <Menu></Menu> : <></>}
@@ -78,7 +93,7 @@ export default function Profile() {
             </div>
           </aside>
           <div className="flex flex-col gap-4 py-4 flex-grow ">
-            <MainPagePost />
+            <MainPagePost openPost={handleOpenPost} />
             <Post
               user="PowerPlay"
               postData={{
