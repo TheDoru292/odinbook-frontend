@@ -1,4 +1,4 @@
-export default function CreatePost({ closePost }) {
+export default function CreatePost({ closePost, username, profilePic }) {
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-50">
       <div
@@ -17,8 +17,12 @@ export default function CreatePost({ closePost }) {
         </div>
         <div className="py-2 px-3 border-t border-stone-700 flex flex-col gap-3">
           <div className="flex gap-2">
-            <div className="w-9 h-9 bg-red-400 rounded-full"></div>
-            <p className="self-center font-bold">User</p>
+            <img
+              src={`${profilePic}`}
+              className="w-9 h-9 rounded-full"
+              alt=""
+            />
+            <p className="self-center font-bold">{username}</p>
           </div>
           <textarea
             style={{ outline: "none" }}
