@@ -1,43 +1,11 @@
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 
-export default function Header({ currentPage, setMenu }) {
-  const [logged, setLogged] = useState();
-  const router = useRouter();
-
-  useEffect(() => {
-    async function fetchData() {
-      const token = localStorage.getItem("token");
-
-      const bodyData = {
-        token: token || "",
-      };
-
-      const data = await fetch("http://localhost:3000/api/auth/test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bodyData),
-      }).then((res) => res.json());
-
-      if (data.code == 400) {
-        setLogged(false);
-        router.push("/");
-      } else {
-        setLogged(true);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  const homeSrc = currentPage == "home" ? "home-blue.svg" : "home.svg";
+export default function Header({ currentPage, setMenu, profilePic }) {
+  const homeSrc = currentPage == "home" ? "/home-blue.svg" : "/home.svg";
   const accountSrc =
     currentPage == "friends"
-      ? "account-multiple-blue.svg"
-      : "account-multiple.svg";
+      ? "/account-multiple-blue.svg"
+      : "/account-multiple.svg";
 
   return (
     <header className="z-10 sticky h-[64px] top-0 flex py-2 px-3 bg-stone-800 border-b-2 border-stone-700">
@@ -56,7 +24,7 @@ export default function Header({ currentPage, setMenu }) {
           className="w-20 rounded-md flex justify-center h-full items-center hover:bg-stone-700"
           href="/"
         >
-          <img src={homeSrc} alt="" width={32} />
+          <img src={homeSrc} alt="" width={32} height={32} />
         </Link>
         <Link
           className="w-20 rounded-md flex justify-center h-full items-center hover:bg-stone-700"
@@ -67,7 +35,7 @@ export default function Header({ currentPage, setMenu }) {
       </div>
       <div className="flex justify-end flex-grow basis-px">
         <button onClick={setMenu}>
-          <div className="rounded-full w-11 h-11 bg-red-400"></div>
+          <img src={`${profilePic}`} className="w-9 h-9 rounded-full" alt="" />
         </button>
       </div>
     </header>
