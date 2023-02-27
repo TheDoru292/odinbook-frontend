@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
+import Head from "next/head";
 
 export default function NotLoggedMainPage() {
   const [email, setEmail] = useState("");
@@ -39,6 +40,9 @@ export default function NotLoggedMainPage() {
 
   return (
     <div className="flex flex-col h-screen">
+      <Head>
+        <title>Profile</title>
+      </Head>
       <main className="flex-grow bg-gray-100 flex justify-center items-center gap-24">
         <div>
           <h1 className="text-5xl mb-2">Odin-book</h1>

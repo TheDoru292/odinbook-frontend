@@ -5,6 +5,7 @@ import Homepage from "@/components/Homepage";
 
 export default function Home() {
   const [logged, setLogged] = useState();
+  const [user, setUser] = useState();
 
   useEffect(() => {
     async function fetchData() {
@@ -25,8 +26,12 @@ export default function Home() {
       if (data.code == 400) {
         setLogged(false);
       } else {
+        console.log(data);
+        localStorage.setItem("id", data.user.id);
         setLogged(true);
       }
+
+      setUser(data.user);
     }
 
     fetchData();
@@ -40,7 +45,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {logged == false ? <NotLoggedMainPage /> : <Homepage />}
+      {logged == false ? <NotLoggedMainPage /> : <Homepage user={user} />}
     </div>
   );
 }
