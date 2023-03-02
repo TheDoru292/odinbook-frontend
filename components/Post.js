@@ -1,6 +1,7 @@
 import format from "date-fns/format";
 import formatDistance from "date-fns/formatDistance";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Post({
   user,
@@ -28,8 +29,6 @@ export default function Post({
         },
       }
     ).then((res) => res.json());
-
-    console.log(data);
 
     if (!data.like) {
       setLikedPost(false);
@@ -69,14 +68,18 @@ export default function Post({
   return (
     <div className="flex gap-2 flex-col rounded-xl bg-stone-800 px-4 py-3">
       <div className="flex gap-2 w-full">
-        <img
-          src={`${postUser?.profile_picture_url}`}
-          className="w-10 h-10 rounded-full"
-          alt=""
-        />
+        <Link href={`/profile/${postUser.url_handle}`}>
+          <img
+            src={`${postUser?.profile_picture_url}`}
+            className="w-10 h-10 rounded-full"
+            alt=""
+          />
+        </Link>
         <div className="flex w-full">
           <div className="flex-grow">
-            <p className="text-sm">{postUser.username}</p>
+            <Link href={`/profile/${postUser.url_handle}`}>
+              <p className="text-sm">{postUser.username}</p>
+            </Link>
             <p className="text-sm text-stone-300">
               {format(new Date(postData.posted_on), "dd MMMM yyyy")}
             </p>
@@ -128,22 +131,28 @@ export default function Post({
       <div className="flex flex-col gap-2">
         {postComments.map((item) => {
           return (
-            <div className="flex gap-2">
-              <img
-                src={`${item.user.profile_picture_url}`}
-                className="w-10 h-10 rounded-full"
-                alt=""
-              />
+            <div key={item._id} className="flex gap-2">
+              <Link href={`/profile/${item.user.url_handle}`}>
+                <img
+                  src={`${item.user.profile_picture_url}`}
+                  className="w-10 h-10 rounded-full"
+                  alt=""
+                />
+              </Link>
               <div>
                 <div className="flex flex-col bg-stone-700 px-3 py-1 rounded-2xl">
-                  <p className="text-xs font-bold">{item.user.username}</p>
+                  <Link href={`/profile/${item.user.url_handle}`}>
+                    <p className="text-xs font-bold">{item.user.username}</p>
+                  </Link>
                   <p className="text-sm">{item.content}</p>
                 </div>
                 <div className="flex gap-3">
                   <p className="text-xs">Like</p>
                   <p className="text-xs">Reply</p>
                   <p className="text-xs">
-                    {formatDistance(new Date(item.commented_on), new Date())}
+                    {formatDistance(new Date(item.commented_on), new Date(), {
+                      addSuffix: true,
+                    })}
                   </p>
                 </div>
               </div>

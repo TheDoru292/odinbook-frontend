@@ -1,5 +1,5 @@
 import Head from "next/head";
-import NotLoggedMainPage from "@/components/MainPageUnlogged";
+import NotLoggedMainPage from "@/components/LogIn";
 import { useEffect, useState } from "react";
 import Homepage from "@/components/Homepage";
 
@@ -26,7 +26,6 @@ export default function Home() {
       if (data.code == 400) {
         setLogged(false);
       } else {
-        console.log(data);
         localStorage.setItem("id", data.user.id);
         setLogged(true);
       }
@@ -45,7 +44,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {logged == false ? <NotLoggedMainPage /> : <Homepage user={user} />}
+      {logged == false ? <Login /> : <Homepage user={user} />}
     </div>
   );
 }
