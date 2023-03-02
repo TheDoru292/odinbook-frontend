@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function LeftSidebar({ user }) {
   return (
     <div
-      style={{ height: "calc(100vh - 64px)", top: "62px" }}
+      style={{ height: "calc(100vh - 64px)", top: "64px" }}
       className="hidden xl:block py-4 pl-2 h-full w-[320px] m-0 sticky"
     >
       <Link href={`/profile/${user?.userhandle}`}>
