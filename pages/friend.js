@@ -81,8 +81,6 @@ export default function Friend() {
 
     fetchData();
     fetchFriendStuff();
-
-    console.log(youMayKnow);
   }, []);
 
   function handleOpenMenu() {
@@ -139,6 +137,21 @@ export default function Friend() {
       }
     ).then((res) => res.json());
 
+    if (friendRequest.success == true) {
+      setNotification(true);
+      setNotificationMessage("Friend request deleted.");
+
+      setTimeout(() => {
+        setNotification(false);
+        setNotificationMessage("");
+      }, 5000);
+    }
+
+    console.log(outgoingFriendRequests.filter((item) => item._id != reqId));
+    setOutgoingFriendRequests((current) =>
+      current.filter((item) => item._id != reqId)
+    );
+
     console.log(friendRequest);
   }
 
@@ -192,7 +205,7 @@ export default function Friend() {
         {notification == true ? (
           <p
             style={{ left: "50%", transform: "translateX(-50%)" }}
-            className="mt-3 bg-stone-700 text-white absolute z-10 m-auto p-2 border rounded-md"
+            className="mt-3 bg-stone-700 text-white fixed z-10 m-auto p-2 border rounded-md"
           >
             {notificationMessage}
           </p>
@@ -244,10 +257,8 @@ export default function Friend() {
                 <p>You have no outgoing friend requests....</p>
               ) : (
                 outgoingFriendRequests.map((item) => {
-                  console.log(item);
-
                   return (
-                    <div>
+                    <div key={item._id}>
                       <img
                         src={`${item.recipient.profile_picture_url}`}
                         className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "
@@ -278,7 +289,6 @@ export default function Friend() {
                   <p>You have no friend requests...</p>
                 ) : (
                   friendRequests.map((item) => {
-                    console.log(item);
                     return (
                       <div key={item._id}>
                         <img
@@ -316,7 +326,7 @@ export default function Friend() {
               <div className="justify-start flex flex-wrap gap-4">
                 {youMayKnow.map((item) => {
                   return (
-                    <div>
+                    <div key={item._id}>
                       <img
                         src={`${item.profile_picture_url}`}
                         className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "
@@ -325,12 +335,27 @@ export default function Friend() {
                       <div className="border-x border-b border-stone-700 p-3 bg-stone-800 flex gap-4 flex-col rounded-b-xl">
                         <p className="font-bold">{item.username}</p>
                         <div className="flex flex-col gap-2">
-                          <button
-                            onClick={() => sendFriendReq(item._id)}
-                            className="py-1 bg-sky-600 rounded-md"
-                          >
-                            Send Request
-                          </button>
+                          {item.friendReq == true ? (
+                            <button
+                              onClick={() => {
+                                removeOutgoingFriendReq(item.friendReqId);
+                                item.friendReq = false;
+                              }}
+                              className="py-1 bg-stone-700 rounded-md"
+                            >
+                              Remove Request
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                sendFriendReq(item._id);
+                                item.friendReq = true;
+                              }}
+                              className="py-1 bg-sky-600 rounded-md"
+                            >
+                              Send Request
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

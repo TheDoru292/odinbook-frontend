@@ -76,6 +76,7 @@ export default function Homepage({ user }) {
           <MainPagePost openPost={handleOpenPost} user={user} />
           {posts.map((item) => (
             <Post
+              key={item.post._id}
               user={user}
               postUser={item.post.user}
               postData={item.post}

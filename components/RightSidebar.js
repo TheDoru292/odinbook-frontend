@@ -30,7 +30,7 @@ export default function RightSidebar() {
 
   return (
     <div
-      style={{ height: "calc(100vh - 64px)", top: "62px" }}
+      style={{ height: "calc(100vh - 64px)", top: "64px" }}
       className="hidden lg:block w-[320px] sticky flex flex-col pr-2"
     >
       <div className="p-2">
@@ -42,9 +42,11 @@ export default function RightSidebar() {
         <p>You have no friends :(</p>
       ) : (
         friends.map((item) => {
-          console.log(item);
           return (
-            <Link href={`/profile/${item.second_user.url_handle}`}>
+            <Link
+              key={item._id}
+              href={`/profile/${item.second_user.url_handle}`}
+            >
               <div className="px-2 py-2 rounded-lg flex items-center gap-3 hover:bg-stone-800">
                 <img
                   src={item.second_user.profile_picture_url}
