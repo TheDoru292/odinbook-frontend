@@ -58,8 +58,6 @@ export default function Profile({ profileUser, friends }) {
         }
       ).then((res) => res.json());
 
-      console.log(data);
-
       setPosts(data.posts);
       setLoading(false);
     }
@@ -106,6 +104,7 @@ export default function Profile({ profileUser, friends }) {
       <main className="relative text-stone-200 flex flex-col flex-grow h-100 bg-stone-900">
         <ProfileData
           currentPage={"posts"}
+          loggedUser={user}
           user={profileUser}
           friends={friends}
         />
@@ -120,7 +119,7 @@ export default function Profile({ profileUser, friends }) {
               </p>
             </div>
             <div
-              style={{ top: "66px" }}
+              style={{ top: "82px" }}
               className="sticky bg-stone-800 rounded-xl px-4 py-3"
             >
               <div className="flex">
@@ -131,7 +130,10 @@ export default function Profile({ profileUser, friends }) {
               <div className="mt-2 flex flex-wrap gap-4">
                 {friends.map((friend) => {
                   return (
-                    <div className="flex-basis flex-grow">
+                    <div
+                      key={friend.second_user._id}
+                      className="flex-basis flex-grow"
+                    >
                       <a
                         href={`/profile/${encodeURIComponent(
                           friend.second_user.url_handle
@@ -164,9 +166,9 @@ export default function Profile({ profileUser, friends }) {
               </p>
             ) : (
               posts.map((item) => {
-                console.log(item);
                 return (
                   <Post
+                    key={item.post._id}
                     user={user}
                     postUser={item.post.user}
                     postData={item.post}
