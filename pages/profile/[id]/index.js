@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import EditDetails from "@/components/EditDetails";
 
 export default function Profile({ profileUser, friends }) {
   const [openMenu, setOpenMenu] = useState(false);
@@ -18,6 +19,7 @@ export default function Profile({ profileUser, friends }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [logged, setLogged] = useState(false);
+  const [openDetailsModel, setOpenDetailsModel] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -74,15 +76,29 @@ export default function Profile({ profileUser, friends }) {
     }
   }
 
-  function handleOpenPost() {
-    if (openPost == false) {
-      setOpenPost(true);
-      document.querySelector("body").classList.remove("overflow-visible");
-      document.querySelector("body").classList.add("overflow-hidden");
-    } else {
-      setOpenPost(false);
-      document.querySelector("body").classList.remove("overflow-hidden");
-      document.querySelector("body").classList.add("overflow-visible");
+  function handleOpenPost(post, detail) {
+    if (post == true) {
+      if (openPost == false) {
+        setOpenPost(true);
+        document.querySelector("body").classList.remove("overflow-visible");
+        document.querySelector("body").classList.add("overflow-hidden");
+      } else {
+        setOpenPost(false);
+        document.querySelector("body").classList.remove("overflow-hidden");
+        document.querySelector("body").classList.add("overflow-visible");
+      }
+    }
+
+    if (detail == true) {
+      if (openDetailsModel == false) {
+        setOpenDetailsModel(true);
+        document.querySelector("body").classList.remove("overflow-visible");
+        document.querySelector("body").classList.add("overflow-hidden");
+      } else {
+        setOpenDetailsModel(false);
+        document.querySelector("body").classList.remove("overflow-hidden");
+        document.querySelector("body").classList.add("overflow-visible");
+      }
     }
   }
 
@@ -101,12 +117,22 @@ export default function Profile({ profileUser, friends }) {
       ) : (
         <></>
       )}
+      {openDetailsModel == true ? (
+        <EditDetails
+          user={user}
+          openModal={setOpenDetailsModel}
+          close={handleOpenPost}
+        />
+      ) : (
+        <></>
+      )}
       <main className="relative text-stone-200 flex flex-col flex-grow h-100 bg-stone-900">
         <ProfileData
           currentPage={"posts"}
           loggedUser={user}
           user={profileUser}
           friends={friends}
+          openDetailsModel={handleOpenPost}
         />
         {openMenu == true ? <Menu user={user}></Menu> : <></>}
         <div className="px-2 xl:px-64 gap-4 flex">
@@ -128,26 +154,28 @@ export default function Profile({ profileUser, friends }) {
               </div>
               <p>{friends.length} friend(s)</p>
               <div className="mt-2 flex flex-wrap gap-4">
-                {friends.map((friend) => {
-                  return (
-                    <div
-                      key={friend.second_user._id}
-                      className="flex-basis flex-grow"
-                    >
-                      <a
-                        href={`/profile/${encodeURIComponent(
-                          friend.second_user.url_handle
-                        )}`}
+                {friends.map((friend, index) => {
+                  if (index <= 9) {
+                    return (
+                      <div
+                        key={friend.second_user._id}
+                        className="flex-basis flex-grow"
                       >
-                        <img
-                          src={friend.second_user.profile_picture_url}
-                          className="w-16 h-16 xl:w-28 xl:h-28 bg-red-400 rounded-md"
-                          alt=""
-                        />
-                        <p>{friend.second_user.username}</p>
-                      </a>
-                    </div>
-                  );
+                        <a
+                          href={`/profile/${encodeURIComponent(
+                            friend.second_user.url_handle
+                          )}`}
+                        >
+                          <img
+                            src={friend.second_user.profile_picture_url}
+                            className="w-16 h-16 xl:w-28 xl:h-28 bg-red-400 rounded-md"
+                            alt=""
+                          />
+                          <p>{friend.second_user.username}</p>
+                        </a>
+                      </div>
+                    );
+                  }
                 })}
               </div>
             </div>
