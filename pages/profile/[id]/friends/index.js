@@ -66,6 +66,7 @@ export default function Friends({ profileUser, friends }) {
           <main className="text-stone-200 flex flex-col w-100 flex-grow bg-stone-900">
             {openMenu == true ? <Menu user={user}></Menu> : <></>}
             <ProfileData
+              loggedUser={user}
               user={profileUser}
               friends={friends}
               currentPage={"friends"}
@@ -75,38 +76,54 @@ export default function Friends({ profileUser, friends }) {
                 <div className="flex">
                   <h2 className="flex-grow text-lg font-bold">Friends</h2>
                   <div className="gap-2 flex items-center">
-                    <p>Friend requests</p>
-                    <p>Find friends</p>
+                    {user.id != profileUser._id ? (
+                      <></>
+                    ) : (
+                      <>
+                        <Link href="/friend">
+                          <p>Friend requests</p>
+                        </Link>
+                        <Link href="/friend">
+                          <p>Find friends</p>
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="flex flex-wrap w-full flex-wrap md:px-6">
-                  {friends.map((item) => {
-                    console.log(item);
-                    return (
-                      <div
-                        key={item.second_user._id}
-                        className="flex gap-4 w-full md:w-6/12 mb-6 md:pr-6"
-                      >
-                        <Link href={`/profile/${item.second_user.url_handle}`}>
-                          <img
-                            src={item.second_user.profile_picture_url}
-                            className="w-14 h-14 md:w-20 md:h-20 rounded-lg"
-                            alt=""
-                          />
-                        </Link>
-                        <Link
-                          className="self-center flex-grow font-bold"
-                          href={`/profile/${item.second_user.url_handle}`}
+                {friends.length == 0 ? (
+                  <p>User has no friends...</p>
+                ) : (
+                  <div className="flex flex-wrap w-full flex-wrap md:px-6">
+                    {friends.map((item) => {
+                      console.log(item);
+                      return (
+                        <div
+                          key={item.second_user._id}
+                          className="flex gap-4 w-full md:w-6/12 mb-6 md:pr-6"
                         >
-                          <p>{item.second_user.username}</p>
-                        </Link>
-                        <p className="self-center border-sky-400 text-sky-400 border p-1 md:p-2 rounded-lg">
-                          <span>✓</span>Friends
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
+                          <Link
+                            href={`/profile/${item.second_user.url_handle}`}
+                          >
+                            <img
+                              src={item.second_user.profile_picture_url}
+                              className="w-14 h-14 md:w-20 md:h-20 rounded-lg"
+                              alt=""
+                            />
+                          </Link>
+                          <Link
+                            className="self-center flex-grow font-bold"
+                            href={`/profile/${item.second_user.url_handle}`}
+                          >
+                            <p>{item.second_user.username}</p>
+                          </Link>
+                          <p className="self-center border-sky-400 text-sky-400 border p-1 md:p-2 rounded-lg">
+                            <span>✓</span>Friends
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </main>
