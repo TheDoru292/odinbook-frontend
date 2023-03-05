@@ -1,7 +1,13 @@
 import Header from "@/components/Header";
 import Head from "next/head";
 import Menu from "@/components/Menu";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import {
+  sendFriendReq,
+  denyFriendReq as deleteFriendReq,
+  acceptFriendReq as acceptFriendRequest,
+} from "@/lib/friend";
 
 export default function Friend() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -91,21 +97,10 @@ export default function Friend() {
     }
   }
 
-  async function sendFriendReq(userId) {
-    const token = localStorage.getItem("token");
+  async function sendFriendReqFunc(reqId) {
+    const data = await sendFriendReq(reqId);
 
-    const friendRequest = await fetch(
-      `http://localhost:3000/api/user/${userId}/friend/request/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then((res) => res.json());
-
-    if (friendRequest.success == true) {
+    if (data.success == true) {
       setNotification(true);
       setNotificationMessage("Friend request sent.");
 
@@ -115,11 +110,7 @@ export default function Friend() {
       }, 5000);
     }
 
-    setOutgoingFriendRequests([
-      ...outgoingFriendRequests,
-      friendRequest.friendReq,
-    ]);
-    console.log([...outgoingFriendRequests, friendRequest.friendReq]);
+    setOutgoingFriendRequests([...outgoingFriendRequests, data.friendReq]);
   }
 
   async function removeOutgoingFriendReq(reqId) {
@@ -145,50 +136,63 @@ export default function Friend() {
         setNotification(false);
         setNotificationMessage("");
       }, 5000);
+
+      let requestUserId = outgoingFriendRequests.map((item) => {
+        if (item._id == reqId) {
+          return item.recipient._id;
+        }
+      });
+
+      setOutgoingFriendRequests((current) =>
+        current.filter((item) => item._id != reqId)
+      );
+
+      setYouMayKnow(
+        youMayKnow.map((item) => {
+          if (item._id == requestUserId) {
+            return { ...item, friendReq: false };
+          } else {
+            return item;
+          }
+        })
+      );
     }
-
-    console.log(outgoingFriendRequests.filter((item) => item._id != reqId));
-    setOutgoingFriendRequests((current) =>
-      current.filter((item) => item._id != reqId)
-    );
-
-    console.log(friendRequest);
   }
 
   async function denyFriendReq(reqId) {
-    const token = localStorage.getItem("token");
-    const id = localStorage.getItem("id");
+    const data = await deleteFriendReq(reqId);
 
-    const friendRequest = await fetch(
-      `http://localhost:3000/api/user/${id}/friend/request/${reqId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then((res) => res.json());
+    if (data.success == true) {
+      setNotification(true);
+      setNotificationMessage("Friend request denied.");
 
-    console.log(friendRequest);
+      setTimeout(() => {
+        setNotification(false);
+        setNotificationMessage("");
+      }, 5000);
+
+      setFriendRequests((current) =>
+        current.filter((item) => item._id != reqId)
+      );
+    }
   }
 
   async function acceptFriendReq(reqId) {
-    const token = localStorage.getItem("token");
-    const id = localStorage.getItem("id");
+    const data = acceptFriendRequest(reqId);
 
-    const friendRequest = await fetch(
-      `http://localhost:3000/api/user/${id}/friend/request/${reqId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then((res) => res.json());
+    if (data.success == true) {
+      setNotification(true);
+      setNotificationMessage("Friend request accepted.");
 
-    console.log(friendRequest);
+      setTimeout(() => {
+        setNotification(false);
+        setNotificationMessage("");
+      }, 5000);
+
+      setFriendRequests((current) =>
+        current.filter((item) => item._id != reqId)
+      );
+    }
   }
 
   return (
@@ -259,17 +263,21 @@ export default function Friend() {
                 outgoingFriendRequests.map((item) => {
                   return (
                     <div key={item._id}>
-                      <img
-                        src={`${item.recipient.profile_picture_url}`}
-                        className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "
-                        alt=""
-                      />
+                      <Link href={`/profile/${item.recipient.url_handle}`}>
+                        <img
+                          src={`${item.recipient.profile_picture_url}`}
+                          className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "
+                          alt=""
+                        />
+                      </Link>
                       <div className="border-x border-b border-stone-700 p-3 bg-stone-800 flex gap-4 flex-col rounded-b-xl">
-                        <p className="font-bold">{item.recipient.username}</p>
+                        <Link href={`/profile/${item.recipient.url_handle}`}>
+                          <p className="font-bold">{item.recipient.username}</p>
+                        </Link>
                         <div className="flex flex-col gap-2">
                           <button
                             onClick={() => removeOutgoingFriendReq(item._id)}
-                            className="py-1 bg-stone-700 rounded-md"
+                            className="py-1 bg-stone-600 hover:bg-stone-700 rounded-md"
                           >
                             Remove
                           </button>
@@ -291,23 +299,27 @@ export default function Friend() {
                   friendRequests.map((item) => {
                     return (
                       <div key={item._id}>
-                        <img
-                          src={`${item.sender.profile_picture_url}`}
-                          className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "
-                          alt=""
-                        />{" "}
+                        <Link href={`/profile/${item.sender.url_handle}`}>
+                          <img
+                            src={`${item.sender.profile_picture_url}`}
+                            className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "
+                            alt=""
+                          />
+                        </Link>
                         <div className="border-x border-b border-stone-700 p-3 bg-stone-800 flex gap-4 flex-col rounded-b-xl">
-                          <p className="font-bold">{item.sender.username}</p>
+                          <Link href={`/profile/${item.sender.url_handle}`}>
+                            <p className="font-bold">{item.sender.username}</p>
+                          </Link>
                           <div className="flex flex-col gap-2">
                             <button
                               onClick={() => acceptFriendReq(item._id)}
-                              className="py-1 bg-sky-600 rounded-md"
+                              className="py-1 bg-sky-600 hover:bg-sky-700 rounded-md"
                             >
                               Confirm
                             </button>
                             <button
                               onClick={() => denyFriendReq(item._id)}
-                              className="py-1 bg-stone-700 rounded-md"
+                              className="py-1 bg-stone-600 hover:bg-stone-700 rounded-md"
                             >
                               Remove
                             </button>
@@ -327,31 +339,35 @@ export default function Friend() {
                 {youMayKnow.map((item) => {
                   return (
                     <div key={item._id}>
-                      <img
-                        src={`${item.profile_picture_url}`}
-                        className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "
-                        alt=""
-                      />
+                      <Link href={`/profile/${item.url_handle}`}>
+                        <img
+                          src={`${item.profile_picture_url}`}
+                          className="border-x border-t border-stone-700 w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 bg-red-400 rounded-t-xl "
+                          alt=""
+                        />
+                      </Link>
                       <div className="border-x border-b border-stone-700 p-3 bg-stone-800 flex gap-4 flex-col rounded-b-xl">
-                        <p className="font-bold">{item.username}</p>
+                        <Link href={`/profile/${item.url_handle}`}>
+                          <p className="font-bold">{item.username}</p>
+                        </Link>
                         <div className="flex flex-col gap-2">
                           {item.friendReq == true ? (
                             <button
-                              onClick={() => {
-                                removeOutgoingFriendReq(item.friendReqId);
+                              onClick={async () => {
+                                await removeOutgoingFriendReq(item.friendReqId);
                                 item.friendReq = false;
                               }}
-                              className="py-1 bg-stone-700 rounded-md"
+                              className="py-1 bg-stone-600 hover:bg-stone-700 rounded-md"
                             >
                               Remove Request
                             </button>
                           ) : (
                             <button
-                              onClick={() => {
-                                sendFriendReq(item._id);
+                              onClick={async () => {
+                                await sendFriendReqFunc(item._id);
                                 item.friendReq = true;
                               }}
-                              className="py-1 bg-sky-600 rounded-md"
+                              className="py-1 bg-sky-600 hover:bg-sky-700 rounded-md"
                             >
                               Send Request
                             </button>
