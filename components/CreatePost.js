@@ -1,4 +1,26 @@
+import Router from "next/router";
+import { useEffect, useState } from "react";
+
 export default function CreatePost({ closePost, username, profilePic }) {
+  const [postContent, setPostContent] = useState("");
+
+  async function post() {
+    const token = localStorage.getItem("token");
+
+    const data = await fetch("http://localhost:3000/api/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ content: postContent }),
+    }).then((res) => res.json());
+
+    if (data.success == true) {
+      Router.reload();
+    }
+  }
+
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-50">
       <div
@@ -11,9 +33,11 @@ export default function CreatePost({ closePost, username, profilePic }) {
         <div className="px-3 pt-3 flex w-full justify-center">
           <h2 className="text-lg font-bold">Create Post</h2>
           <div
-            className="mt-0.5 absolute w-7 h-7 right-0 bg-red-400 mr-4 align-self rounded-full cursor-pointer"
-            onClick={closePost}
-          ></div>
+            className="mt-0.5 absolute justify-center w-7 h-7 right-0 hover:bg-stone-700 bg-stone-600 flex mr-4 align-self rounded-full cursor-pointer"
+            onClick={() => closePost(true)}
+          >
+            <p className="align-center">X</p>
+          </div>
         </div>
         <div className="py-2 px-3 border-t border-stone-700 flex flex-col gap-3">
           <div className="flex gap-2">
@@ -29,13 +53,16 @@ export default function CreatePost({ closePost, username, profilePic }) {
             className="bg-inherit resize-none"
             name=""
             id=""
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
             rows="3"
             placeholder="What's on your mind, User?"
           ></textarea>
-          <button className="border border-stone-700 py-1 rounded-md">
-            Add image to post
-          </button>
-          <button className="border border-stone-700 py-2 rounded-md bg-stone-700">
+          <button
+            disabled={postContent.length == 0 ? true : false}
+            onClick={() => post()}
+            className="bg-sky-600 py-2 rounded-md disabled:bg-stone-700"
+          >
             Post
           </button>
         </div>
