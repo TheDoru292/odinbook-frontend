@@ -60,7 +60,11 @@ export default function Profile({ profileUser, friends }) {
         }
       ).then((res) => res.json());
 
-      setPosts(data.posts);
+      const sortedPost = data.posts.sort((a, b) => {
+        return new Date(b.post.posted_on) - new Date(a.post.posted_on);
+      });
+
+      setPosts(sortedPost);
       setLoading(false);
     }
 
@@ -87,9 +91,7 @@ export default function Profile({ profileUser, friends }) {
         document.querySelector("body").classList.remove("overflow-hidden");
         document.querySelector("body").classList.add("overflow-visible");
       }
-    }
-
-    if (detail == true) {
+    } else if (detail == true) {
       if (openDetailsModel == false) {
         setOpenDetailsModel(true);
         document.querySelector("body").classList.remove("overflow-visible");
@@ -150,7 +152,9 @@ export default function Profile({ profileUser, friends }) {
             >
               <div className="flex">
                 <h2 className="flex-grow text-lg font-bold">Friends</h2>
-                <p className="text-lg ">See All Friends</p>
+                <Link href={`/profile/${profileUser.url_handle}/friends`}>
+                  <p className="text-lg ">See All Friends</p>
+                </Link>
               </div>
               <p>{friends.length} friend(s)</p>
               <div className="mt-2 flex flex-wrap gap-4">
@@ -193,19 +197,18 @@ export default function Profile({ profileUser, friends }) {
                 User has no posts.
               </p>
             ) : (
-              posts.map((item) => {
-                return (
-                  <Post
-                    key={item.post._id}
-                    user={user}
-                    postUser={item.post.user}
-                    postData={item.post}
-                    likes={item.likes}
-                    comments={item.comments}
-                    liked={item.liked}
-                  />
-                );
-              })
+              posts.map((item) => (
+                <Post
+                  key={item.post._id}
+                  user={user}
+                  postUser={item.post.user}
+                  postData={item.post}
+                  likes={item.likes}
+                  comments={item.comments}
+                  liked={item.liked}
+                  setPosts={setPosts}
+                />
+              ))
             )}
           </div>
         </div>
