@@ -14,6 +14,7 @@ export default function ProfileData({
   loggedUser,
   user,
   friends,
+  openDetailsModel,
 }) {
   const [currentUser, setCurrentUser] = useState();
   const [areFriends, setAreFriends] = useState(false);
@@ -107,12 +108,12 @@ export default function ProfileData({
 
   const postsStyling =
     currentPage == "posts"
-      ? "border-b border-sky-400 rounded-t-md text-sky-400 hover:bg-stone-600 px-2 py-3"
+      ? "border-b border-sky-400 rounded-t-md text-sky-400 px-2 py-3"
       : "hover:bg-stone-600 rounded-md px-2 py-3";
 
   const friendsStyling =
     currentPage == "friends"
-      ? "border-b border-sky-400 rounded-t-md text-sky-400 hover:bg-stone-600 px-2 py-3"
+      ? "border-b border-sky-400 rounded-t-md text-sky-400 px-2 py-3"
       : "hover:bg-stone-600 rounded-md px-2 py-3";
 
   return (
@@ -129,8 +130,13 @@ export default function ProfileData({
         </div>
         <div className="self-center">
           {_.isEqual(user, currentUser) ? (
-            <button className="p-2 bg-stone-700 rounded-md">
-              Change Profile Picture
+            <button
+              onClick={() => {
+                openDetailsModel(false, true);
+              }}
+              className="p-2 bg-stone-700 rounded-md"
+            >
+              Change Details
             </button>
           ) : areFriends == true ? (
             <button
