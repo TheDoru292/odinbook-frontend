@@ -25,9 +25,13 @@ export default function Homepage({ user }) {
         },
       }).then((res) => res.json());
 
-      console.log(data);
+      if (data.posts) {
+        const sortedPost = data.posts.sort((a, b) => {
+          return new Date(b.post.posted_on) - new Date(a.post.posted_on);
+        });
 
-      setPosts(data.posts);
+        setPosts(sortedPost);
+      }
     }
 
     fetchData();
@@ -83,6 +87,7 @@ export default function Homepage({ user }) {
               likes={item.likes}
               comments={item.comments}
               liked={item.liked}
+              setPosts={setPosts}
             />
           ))}
         </main>
