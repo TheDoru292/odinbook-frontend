@@ -1,12 +1,16 @@
+import Link from "next/link";
+
 export default function MainPagePost({ openPost, user }) {
   return (
     <div className="flex flex-col rounded-xl gap-3 bg-stone-800 px-4 py-3">
       <div className="flex gap-2">
-        <img
-          src={`${user?.profilePicture}`}
-          className="w-9 h-9 rounded-full"
-          alt=""
-        />
+        <Link href={`/profile/${user?.userhandle}`}>
+          <img
+            src={`${user?.profilePicture}`}
+            className="w-9 h-9 rounded-full"
+            alt=""
+          />
+        </Link>
         <button
           onClick={() => openPost(true)}
           className="text-start px-4 w-full bg-stone-700 rounded-2xl"

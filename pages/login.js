@@ -107,22 +107,22 @@ export default function Login({ query }) {
             </div>
             <button
               type="submit"
-              className="bg-sky-400 w-full mb-2 py-2 rounded-md"
+              className="bg-sky-400 hover:bg-sky-500 w-full mb-2 py-2 rounded-md"
             >
               Log in
             </button>
           </form>
           <div className="flex flex-col gap-2">
-            <button className="bg-green-400 py-2 rounded-md">
+            <button className="bg-green-400 hover:bg-green-500 py-2 rounded-md">
               I'm just looking around!
             </button>
-            <button className="bg-sky-700 py-2 mb-4 rounded-md">
+            <button className="bg-violet-400 hover:bg-violet-500 py-2 mb-4 rounded-md">
               Log in with Facebook
             </button>
           </div>
           <hr />
           <div className="flex justify-center">
-            <button className="w-1/2 mt-4 bg-green-500 py-2 rounded-md">
+            <button className="w-1/2 mt-4 bg-green-400 hover:bg-green-500 py-2 rounded-md">
               <Link href={`/signup`}>Create account</Link>
             </button>
           </div>

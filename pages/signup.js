@@ -152,14 +152,14 @@ export default function SignUp() {
             </div>
             <button
               type="submit"
-              className="mb-4 bg-sky-400 w-full mb-2 py-2 rounded-md"
+              className="mb-4 bg-sky-400 hover:bg-sky-500 w-full mb-2 py-2 rounded-md"
             >
               Create account
             </button>
           </form>
           <hr />
           <div className="flex flex-col">
-            <button className="mt-4 bg-green-400 py-2 rounded-md">
+            <button className="mt-4 bg-green-400 hover:bg-green-500 py-2 rounded-md">
               <Link href="/login">Go back to log in</Link>
             </button>
           </div>

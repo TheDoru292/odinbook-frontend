@@ -199,13 +199,13 @@ export default function Post({
               <button
                 disabled={postContent.length == 0 ? true : false}
                 onClick={editPost}
-                className="self-center disabled:bg-stone-600 bg-sky-600 p-2 rounded-md"
+                className="self-center disabled:bg-stone-600 bg-sky-600 hover:bg-sky-700 p-2 rounded-md"
               >
                 Save Changes
               </button>
               <button
                 onClick={() => setEdit(false)}
-                className="bg-stone-600 p-2 rounded-md"
+                className="bg-stone-600 hover:bg-stone-700 p-2 rounded-md"
               >
                 Cancel
               </button>

@@ -134,30 +134,32 @@ export default function ProfileData({
               onClick={() => {
                 openDetailsModel(false, true);
               }}
-              className="p-2 bg-stone-700 rounded-md"
+              className="p-2 bg-sky-600 hover:bg-sky-700 rounded-md"
             >
               Change Details
             </button>
           ) : areFriends == true ? (
             <button
               onClick={removeFriendFunc}
-              className="p-2 bg-stone-700 rounded-md"
+              className="p-2 bg-stone-600 hover:bg-stone-700 rounded-md"
             >
               Unfriend
             </button>
           ) : friendReq.outgoingFriendReq ? (
-            <button className="p-2 bg-sky-600 rounded-md">Respond</button>
+            <button className="p-2 bg-sky-600 hover:bg-sky-700 rounded-md">
+              Respond
+            </button>
           ) : friendReq.sentFriendReq ? (
             <button
               onClick={removeOutgoingFriendReqFunc}
-              className="p-2 bg-sky-600 rounded-md"
+              className="p-2 bg-sky-600 hover:bg-sky-700 rounded-md"
             >
               Cancel Request
             </button>
           ) : (
             <button
               onClick={sendFriendReqFunc}
-              className="p-2 bg-sky-600 rounded-md"
+              className="p-2 bg-sky-600 hover:bg-sky-700 rounded-md"
             >
               Add Friend
             </button>
@@ -174,13 +176,13 @@ export default function ProfileData({
               onClick={() => {
                 acceptFriendReqFunc(friendReq.outgoingFriendReq._id);
               }}
-              className="py-1 px-2 bg-sky-600 rounded-md"
+              className="py-1 px-2 bg-sky-600 hover:bg-sky-700 rounded-md"
             >
               Confirm Request
             </button>
             <button
               onClick={() => denyFriendReqFunc(friendReq.outgoingFriendReq._id)}
-              className="py-1 px-2 bg-stone-600 rounded-md"
+              className="py-1 px-2 bg-stone-600 hover:bg-stone-700 rounded-md"
             >
               Remove Request
             </button>
