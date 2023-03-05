@@ -24,7 +24,7 @@ export default function ProfileData({
       const token = localStorage.getItem("token");
 
       const data = await fetch(
-        `http://localhost:3000/api/user/check/${user._id}`,
+        `https://odinbook-backend-iccv.onrender.com/api/user/check/${user._id}`,
         {
           method: "GET",
           headers: {

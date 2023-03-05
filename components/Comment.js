@@ -38,7 +38,7 @@ export default function Comment({
         const token = localStorage.getItem("token");
 
         const data = await fetch(
-          `http://localhost:3000/api/post/${comment.post}/comment/${comment._id}`,
+          `https://odinbook-backend-iccv.onrender.com/api/post/${comment.post}/comment/${comment._id}`,
           {
             method: "PUT",
             headers: {

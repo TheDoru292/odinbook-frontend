@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const backendURL = "http://localhost:3000";
+const backendURL = "https://odinbook-backend-iccv.onrender.com";
 
 export const registerUser = createAsyncThunk(
   "auth/register",

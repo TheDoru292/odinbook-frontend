@@ -10,7 +10,7 @@ export default function RightSidebar() {
       const userId = localStorage.getItem("id");
 
       const data = await fetch(
-        `http://localhost:3000/api/user/${userId}/friend`,
+        `https://odinbook-backend-iccv.onrender.com/api/user/${userId}/friend`,
         {
           method: "GET",
           headers: {

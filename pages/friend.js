@@ -34,7 +34,7 @@ export default function Friend() {
       const id = localStorage.getItem("id");
 
       const friendRequests = await fetch(
-        `http://localhost:3000/api/user/${id}/friend/request`,
+        `https://odinbook-backend-iccv.onrender.com/api/user/${id}/friend/request`,
         {
           method: "GET",
           headers: {
@@ -45,7 +45,7 @@ export default function Friend() {
       ).then((res) => res.json());
 
       const outgoingFriendRequests = await fetch(
-        `http://localhost:3000/api/user/${id}/friend/request/outgoing`,
+        `https://odinbook-backend-iccv.onrender.com/api/user/${id}/friend/request/outgoing`,
         {
           method: "GET",
           headers: {
@@ -55,13 +55,16 @@ export default function Friend() {
         }
       ).then((res) => res.json());
 
-      const users = await fetch("http://localhost:3000/api/user/friends", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((res) => res.json());
+      const users = await fetch(
+        "https://odinbook-backend-iccv.onrender.com/api/user/friends",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ).then((res) => res.json());
 
       console.log(users);
       const array = users.users.filter((item) => item._id != id);
@@ -101,7 +104,7 @@ export default function Friend() {
     const id = localStorage.getItem("id");
 
     const friendRequest = await fetch(
-      `http://localhost:3000/api/user/${id}/friend/request/outgoing/${reqId}`,
+      `https://odinbook-backend-iccv.onrender.com/api/user/${id}/friend/request/outgoing/${reqId}`,
       {
         method: "DELETE",
         headers: {

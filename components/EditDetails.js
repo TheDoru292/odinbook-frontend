@@ -16,14 +16,17 @@ export default function EditDetails({ user, close }) {
       profile_picture_url: profilePicUrl,
     };
 
-    const data = await fetch(`http://localhost:3000/api/user/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(bodyObj),
-    }).then((res) => res.json());
+    const data = await fetch(
+      `https://odinbook-backend-iccv.onrender.com/api/user/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(bodyObj),
+      }
+    ).then((res) => res.json());
 
     console.log(data);
 

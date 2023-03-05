@@ -7,14 +7,17 @@ export default function CreatePost({ closePost, username, profilePic }) {
   async function post() {
     const token = localStorage.getItem("token");
 
-    const data = await fetch("http://localhost:3000/api/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ content: postContent }),
-    }).then((res) => res.json());
+    const data = await fetch(
+      "https://odinbook-backend-iccv.onrender.com/api/post",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content: postContent }),
+      }
+    ).then((res) => res.json());
 
     if (data.success == true) {
       Router.reload();

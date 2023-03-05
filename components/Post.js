@@ -25,7 +25,7 @@ export default function Post({
     const token = localStorage.getItem("token");
 
     const data = await fetch(
-      `http://localhost:3000/api/post/${postData._id}/like`,
+      `https://odinbook-backend-iccv.onrender.com/api/post/${postData._id}/like`,
       {
         method: "POST",
         headers: {
@@ -53,7 +53,7 @@ export default function Post({
       const token = localStorage.getItem("token");
 
       const data = await fetch(
-        `http://localhost:3000/api/post/${postData._id}/comment`,
+        `https://odinbook-backend-iccv.onrender.com/api/post/${postData._id}/comment`,
         {
           method: "POST",
           headers: {
@@ -86,13 +86,16 @@ export default function Post({
   async function deletePost() {
     const token = localStorage.getItem("token");
 
-    const data = await fetch(`http://localhost:3000/api/post/${postData._id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((res) => res.json());
+    const data = await fetch(
+      `https://odinbook-backend-iccv.onrender.com/api/post/${postData._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then((res) => res.json());
 
     console.log(data);
 
@@ -104,14 +107,17 @@ export default function Post({
   async function editPost() {
     const token = localStorage.getItem("token");
 
-    const data = await fetch(`http://localhost:3000/api/post/${postData._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ content: postContent }),
-    }).then((res) => res.json());
+    const data = await fetch(
+      `https://odinbook-backend-iccv.onrender.com/api/post/${postData._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content: postContent }),
+      }
+    ).then((res) => res.json());
 
     console.log(data);
 

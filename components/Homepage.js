@@ -17,13 +17,16 @@ export default function Homepage({ user }) {
     async function fetchData() {
       const token = localStorage.getItem("token");
 
-      const data = await fetch(`http://localhost:3000/api/post/`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((res) => res.json());
+      const data = await fetch(
+        `https://odinbook-backend-iccv.onrender.com/api/post/`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ).then((res) => res.json());
 
       if (data.posts) {
         const sortedPost = data.posts.sort((a, b) => {
