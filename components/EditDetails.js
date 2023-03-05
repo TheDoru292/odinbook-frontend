@@ -45,11 +45,13 @@ export default function EditDetails({ user, close }) {
         <div className="px-3 pt-3 flex w-full justify-center">
           <h2 className="text-lg font-bold">Edit Details</h2>
           <div
-            className="mt-0.5 absolute w-7 h-7 right-0 bg-red-400 mr-4 align-self rounded-full cursor-pointer"
+            className="mt-0.5 absolute justify-center w-7 h-7 right-0 hover:bg-stone-700 bg-stone-600 flex mr-4 align-self rounded-full cursor-pointer"
             onClick={() => {
               close(false, true);
             }}
-          ></div>
+          >
+            <p className="align-center">X</p>
+          </div>
         </div>
         <div className="py-2 px-3 border-t border-stone-700 flex flex-col gap-3">
           {error == true ? (

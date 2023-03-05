@@ -14,8 +14,12 @@ export default function Menu({ user }) {
         </div>
       </Link>
       <div className="p-2 rounded-lg hover:bg-stone-700">
-        <Link href="/logout" className="flex gap-3">
-          <div className="w-9 h-9 bg-red-400 rounded-full"></div>
+        <Link href="/signout" className="flex gap-3">
+          <img
+            src="/logout-variant.svg"
+            alt=""
+            className="w-9 h-9 rounded-full"
+          />
           <p className="text-white self-center">Log Out</p>
         </Link>
       </div>
