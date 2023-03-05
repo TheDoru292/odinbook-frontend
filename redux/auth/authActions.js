@@ -38,8 +38,12 @@ export const userLogin = createAsyncThunk(
     try {
       const data = await fetch(`${backendURL}/api/auth/login`, {
         method: "POST",
+        credentials: "include",
+        mode: "cors",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin":
+            "https://odinbook-frontend.onrender.com/",
         },
         body: JSON.stringify({ email, password }),
       }).then((res) => res.json());
