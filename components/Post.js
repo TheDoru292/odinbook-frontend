@@ -68,9 +68,9 @@ export default function Post({
 
       const comment = {
         user: {
-          profile_picture_url: user.profilePicture,
+          profile_picture_url: user.profile_picture_url,
           username: user.username,
-          url_handle: user.userhandle,
+          url_handle: user.url_handle,
         },
         content: data.comment.content,
         commented_on: data.comment.commented_on,
@@ -164,7 +164,7 @@ export default function Post({
             </p>
           </div>
           <div>
-            {user?.id != postUser._id ? (
+            {user?._id != postUser._id ? (
               <></>
             ) : (
               <button
@@ -271,7 +271,7 @@ export default function Post({
         })}
         <div className="flex gap-2">
           <img
-            src={`${user?.profilePicture}`}
+            src={`${user?.profile_picture_url}`}
             className="w-8 h-8 rounded-full"
             alt=""
           />

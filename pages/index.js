@@ -1,43 +1,19 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Homepage from "@/components/Homepage";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 export default function Home() {
-  const [logged, setLogged] = useState();
-  const [user, setUser] = useState();
-
-  const router = useRouter();
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    async function fetchData() {
-      const token = localStorage.getItem("token");
-
-      const bodyData = {
-        token: token || "",
-      };
-
-      const data = await fetch("http://localhost:3000/api/auth/test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bodyData),
-      }).then((res) => res.json());
-
-      if (data.code == 400) {
-        router.push("/login");
-        setLogged(false);
-      } else {
-        localStorage.setItem("id", data.user.id);
-        setLogged(true);
-      }
-
-      setUser(data.user);
+    if (!userInfo) {
+      router.push("/login");
     }
+  }, [userInfo]);
 
-    fetchData();
-  }, []);
+  const router = useRouter();
 
   return (
     <div className="flex flex-col">
@@ -47,7 +23,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {logged == false ? <></> : <Homepage user={user} />}
+      {!userInfo ? <></> : <Homepage user={userInfo} />}
     </div>
   );
 }

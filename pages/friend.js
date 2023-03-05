@@ -8,42 +8,27 @@ import {
   denyFriendReq as deleteFriendReq,
   acceptFriendReq as acceptFriendRequest,
 } from "@/lib/friend";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 export default function Friend() {
   const [openMenu, setOpenMenu] = useState(false);
-  const [logged, setLogged] = useState(false);
-  const [user, setUser] = useState();
   const [youMayKnow, setYouMayKnow] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [outgoingFriendRequests, setOutgoingFriendRequests] = useState([]);
   const [notification, setNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
 
+  const { userInfo, userToken } = useSelector((state) => state.auth);
+  const router = useRouter();
+
   useEffect(() => {
-    async function fetchData() {
-      const token = localStorage.getItem("token");
-
-      const bodyData = {
-        token: token || "",
-      };
-
-      const data = await fetch("http://localhost:3000/api/auth/test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bodyData),
-      }).then((res) => res.json());
-
-      if (data.code == 400) {
-        setLogged(false);
-      } else {
-        setLogged(true);
-      }
-
-      setUser(data.user);
+    if (!userInfo) {
+      router.push("/login");
     }
+  }, [userInfo]);
 
+  useEffect(() => {
     async function fetchFriendStuff() {
       const token = localStorage.getItem("token");
       const id = localStorage.getItem("id");
@@ -85,7 +70,6 @@ export default function Friend() {
       setOutgoingFriendRequests(outgoingFriendRequests.friendReqs);
     }
 
-    fetchData();
     fetchFriendStuff();
   }, []);
 
@@ -114,7 +98,6 @@ export default function Friend() {
   }
 
   async function removeOutgoingFriendReq(reqId) {
-    const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
 
     const friendRequest = await fetch(
@@ -123,7 +106,7 @@ export default function Friend() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       }
     ).then((res) => res.json());
@@ -203,7 +186,7 @@ export default function Friend() {
       <Header
         currentPage="friends"
         setMenu={handleOpenMenu}
-        profilePic={user?.profilePicture}
+        profilePic={userInfo?.profile_picture_url}
       />
       <main className="text-stone-200 flex flex-grow h-100 bg-stone-900">
         {notification == true ? (
@@ -216,7 +199,7 @@ export default function Friend() {
         ) : (
           <></>
         )}
-        {openMenu == true ? <Menu user={user}></Menu> : <></>}
+        {openMenu == true ? <Menu user={userInfo}></Menu> : <></>}
         <div
           style={{ height: "calc(100vh - 64px)", top: "62px" }}
           className="hidden lg:block sticky h-100 w-2/12 py-2 px-3 bg-stone-800 flex flex-col gap-2"

@@ -6,10 +6,10 @@ export default function LeftSidebar({ user }) {
       style={{ height: "calc(100vh - 64px)", top: "64px" }}
       className="hidden xl:block py-4 pl-2 h-full w-[320px] m-0 sticky"
     >
-      <Link href={`/profile/${user?.userhandle}`}>
+      <Link href={`/profile/${user?.url_handle}`}>
         <div className="hover:bg-stone-700 px-2 py-2 rounded-lg flex gap-4">
           <img
-            src={`${user?.profilePicture}`}
+            src={`${user?.profile_picture_url}`}
             className="w-9 h-9 rounded-full"
             alt=""
           />

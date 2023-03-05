@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
 import Head from "next/head";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import { userLogin } from "@/redux/auth/authActions";
 
 Login.getInitialProps = ({ query }) => {
   return { query };
@@ -11,44 +13,27 @@ Login.getInitialProps = ({ query }) => {
 export default function Login({ query }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+
+  const { userInfo, error } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (userInfo) {
+      router.push("/");
+    }
+  }, [userInfo]);
+
   async function logIn(e) {
     e.preventDefault();
-    console.log("hi");
 
-    const bodyData = {
+    const data = {
       email: email,
       password: password,
     };
 
-    const data = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      credentials: "include",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3001",
-      },
-      body: JSON.stringify(bodyData),
-    }).then((res) => res.json());
-
-    console.log(data);
-
-    if (data.code == 400) {
-      setError(true);
-      setErrorMessage(data.status);
-    } else {
-      setError(false);
-    }
-
-    if (data.success == true) {
-      localStorage.setItem("token", data.token);
-      router.push("/");
-    }
+    dispatch(userLogin(data));
   }
 
   return (

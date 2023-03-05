@@ -16,7 +16,6 @@ export default function ProfileData({
   friends,
   openDetailsModel,
 }) {
-  const [currentUser, setCurrentUser] = useState();
   const [areFriends, setAreFriends] = useState(false);
   const [friendReq, setFriendReq] = useState({});
 
@@ -38,22 +37,12 @@ export default function ProfileData({
       setFriendReq(data);
     }
 
-    const obj = {
-      _id: loggedUser?.id,
-      username: loggedUser?.username,
-      url_handle: loggedUser?.userhandle,
-      profile_picture_url: loggedUser?.profilePicture,
-      registered_on: user.registered_on,
-    };
-
-    setCurrentUser(obj);
-
     const value = friends.some((item) => {
       return _.isEqual(item.second_user, {
-        _id: loggedUser?.id,
+        _id: loggedUser?._id,
         username: loggedUser?.username,
-        url_handle: loggedUser?.userhandle,
-        profile_picture_url: loggedUser?.profilePicture,
+        url_handle: loggedUser?.url_handle,
+        profile_picture_url: loggedUser?.profile_picture_url,
       });
     });
 
@@ -129,7 +118,7 @@ export default function ProfileData({
           <p className="text-stone-400 font-bold">{friends.length} friends</p>
         </div>
         <div className="self-center">
-          {_.isEqual(user, currentUser) ? (
+          {_.isEqual(user, loggedUser) ? (
             <button
               onClick={() => {
                 openDetailsModel(false, true);

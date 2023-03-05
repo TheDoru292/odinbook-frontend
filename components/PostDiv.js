@@ -4,9 +4,9 @@ export default function MainPagePost({ openPost, user }) {
   return (
     <div className="flex flex-col rounded-xl gap-3 bg-stone-800 px-4 py-3">
       <div className="flex gap-2">
-        <Link href={`/profile/${user?.userhandle}`}>
+        <Link href={`/profile/${user?.url_handle}`}>
           <img
-            src={`${user?.profilePicture}`}
+            src={`${user?.profile_picture_url}`}
             className="w-9 h-9 rounded-full"
             alt=""
           />

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
 import Head from "next/head";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "@/redux/auth/authActions";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -10,16 +12,24 @@ export default function SignUp() {
   const [profilePicUrl, setProfilePicUrl] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [error, setError] = useState(false);
-  const [errorArray, setErrorArray] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
 
+  const { loading, userInfo, error, success } = useSelector(
+    (state) => state.auth
+  );
+
+  const dispatch = useDispatch();
   const router = useRouter();
+
+  useEffect(() => {
+    if (success == true) router.push("/login");
+
+    if (userInfo) router.push("/");
+  });
 
   async function signUp(e) {
     e.preventDefault();
 
-    const bodyObj = {
+    const data = {
       email: email,
       username: username,
       password: password,
@@ -27,30 +37,7 @@ export default function SignUp() {
       url_handle: urlHandle,
     };
 
-    const data = await fetch("http://localhost:3000/api/user/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodyObj),
-    }).then((res) => res.json());
-
-    if (data.errors) {
-      setError(true);
-      setErrorArray(data.errors);
-    }
-
-    if (data.success == true) {
-      setError(false);
-      router.push("/login?message=You+can+now+login.");
-    }
-
-    if (data.success == false) {
-      setError(true);
-      setErrorMessage(data.status);
-    }
-
-    console.log(data);
+    dispatch(registerUser(data));
   }
 
   return (

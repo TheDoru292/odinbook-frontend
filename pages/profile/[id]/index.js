@@ -9,43 +9,28 @@ import { getAllProfileUrl, getUserData, getUserFriends } from "@/lib/profile";
 import { format } from "date-fns";
 import Head from "next/head";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import EditDetails from "@/components/EditDetails";
 
 export default function Profile({ profileUser, friends }) {
   const [openMenu, setOpenMenu] = useState(false);
   const [openPost, setOpenPost] = useState(false);
-  const [user, setUser] = useState();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [logged, setLogged] = useState(false);
   const [openDetailsModel, setOpenDetailsModel] = useState(false);
 
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const router = useRouter();
+
   useEffect(() => {
-    async function fetchData() {
-      const token = localStorage.getItem("token");
-
-      const bodyData = {
-        token: token || "",
-      };
-
-      const data = await fetch("http://localhost:3000/api/auth/test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bodyData),
-      }).then((res) => res.json());
-
-      if (data.code == 400) {
-        setLogged(false);
-      } else {
-        setLogged(true);
-      }
-
-      setUser(data.user);
+    if (!userInfo) {
+      router.push("/login");
     }
+  }, [userInfo]);
 
+  useEffect(() => {
     async function fetchPosts() {
       const token = localStorage.getItem("token");
 
@@ -69,7 +54,6 @@ export default function Profile({ profileUser, friends }) {
     }
 
     fetchPosts();
-    fetchData();
   }, []);
 
   function handleOpenMenu() {
@@ -109,11 +93,14 @@ export default function Profile({ profileUser, friends }) {
       <Head>
         <title>{profileUser.username} - OdinBook</title>
       </Head>
-      <Header setMenu={handleOpenMenu} profilePic={user?.profilePicture} />
+      <Header
+        setMenu={handleOpenMenu}
+        profilePic={userInfo?.profile_picture_url}
+      />
       {openPost == true ? (
         <CreatePost
-          username={user?.username}
-          profilePic={user?.profilePicture}
+          username={userInfo?.username}
+          profilePic={userInfo?.profile_picture_url}
           closePost={handleOpenPost}
         />
       ) : (
@@ -121,7 +108,7 @@ export default function Profile({ profileUser, friends }) {
       )}
       {openDetailsModel == true ? (
         <EditDetails
-          user={user}
+          user={userInfo}
           openModal={setOpenDetailsModel}
           close={handleOpenPost}
         />
@@ -131,12 +118,12 @@ export default function Profile({ profileUser, friends }) {
       <main className="relative text-stone-200 flex flex-col flex-grow h-100 bg-stone-900">
         <ProfileData
           currentPage={"posts"}
-          loggedUser={user}
+          loggedUser={userInfo}
           user={profileUser}
           friends={friends}
           openDetailsModel={handleOpenPost}
         />
-        {openMenu == true ? <Menu user={user}></Menu> : <></>}
+        {openMenu == true ? <Menu user={userInfo}></Menu> : <></>}
         <div className="px-2 xl:px-64 gap-4 flex">
           <aside className="hidden md:flex m-0 w-5/12 flex-col gap-4 py-4">
             <div className="bg-stone-800 rounded-xl px-4 py-3">
@@ -185,10 +172,10 @@ export default function Profile({ profileUser, friends }) {
             </div>
           </aside>
           <div className="flex flex-col gap-4 py-4 flex-grow ">
-            {profileUser._id !== user?.id ? (
+            {profileUser._id !== userInfo?._id ? (
               <></>
             ) : (
-              <MainPagePost openPost={handleOpenPost} user={user} />
+              <MainPagePost openPost={handleOpenPost} user={userInfo} />
             )}
             {loading == true ? (
               <p>Loading....</p>
@@ -200,7 +187,7 @@ export default function Profile({ profileUser, friends }) {
               posts.map((item) => (
                 <Post
                   key={item.post._id}
-                  user={user}
+                  user={userInfo}
                   postUser={item.post.user}
                   postData={item.post}
                   likes={item.likes}

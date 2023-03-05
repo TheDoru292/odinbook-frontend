@@ -3,7 +3,7 @@ import Router from "next/router";
 
 export default function EditDetails({ user, close }) {
   const [username, setUsername] = useState(user.username);
-  const [profilePicUrl, setProfilePicUrl] = useState(user.profilePicture);
+  const [profilePicUrl, setProfilePicUrl] = useState(user.profile_picture_url);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 

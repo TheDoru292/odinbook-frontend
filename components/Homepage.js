@@ -62,13 +62,13 @@ export default function Homepage({ user }) {
       <Header
         currentPage="home"
         setMenu={handleOpenMenu}
-        profilePic={user?.profilePicture}
+        profilePic={user?.profile_picture_url}
       />
       {openPost == true ? (
         <CreatePost
           closePost={handleOpenPost}
           username={user?.username}
-          profilePic={user?.profilePicture}
+          profilePic={user?.profile_picture_url}
         />
       ) : (
         <></>
