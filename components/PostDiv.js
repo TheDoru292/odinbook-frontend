@@ -8,7 +8,7 @@ export default function MainPagePost({ openPost, user }) {
           alt=""
         />
         <button
-          onClick={openPost}
+          onClick={() => openPost(true)}
           className="text-start px-4 w-full bg-stone-700 rounded-2xl"
         >
           What's on your mind, {user?.username}?

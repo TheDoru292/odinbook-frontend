@@ -1,5 +1,5 @@
 import Router from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function CreatePost({ closePost, username, profilePic }) {
   const [postContent, setPostContent] = useState("");
