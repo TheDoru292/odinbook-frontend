@@ -1,7 +1,8 @@
 import format from "date-fns/format";
-import formatDistance from "date-fns/formatDistance";
 import { useState } from "react";
 import Link from "next/link";
+import Comment from "./Comment";
+import he from "he";
 
 export default function Post({
   user,
@@ -10,11 +11,15 @@ export default function Post({
   likes,
   liked,
   comments,
+  setPosts,
 }) {
   const [likedPost, setLikedPost] = useState(liked == true ? true : false);
   const [likesPost, setLikesPost] = useState(likes.count);
   const [postComments, setPostComments] = useState(comments);
   const [commentContent, setCommentContent] = useState("");
+  const [options, setOptions] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [postContent, setPostContent] = useState(postData.content);
 
   async function like() {
     const token = localStorage.getItem("token");
@@ -59,9 +64,59 @@ export default function Post({
         }
       ).then((res) => res.json());
 
+      console.log(user);
+
+      const comment = {
+        user: {
+          profile_picture_url: user.profilePicture,
+          username: user.username,
+          url_handle: user.userhandle,
+        },
+        content: data.comment.content,
+        commented_on: data.comment.commented_on,
+      };
+
       if (data.success == true) {
         setCommentContent("");
+        setPostComments([...postComments, comment]);
       }
+    }
+  }
+
+  async function deletePost() {
+    const token = localStorage.getItem("token");
+
+    const data = await fetch(`http://localhost:3000/api/post/${postData._id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
+
+    console.log(data);
+
+    if (data.success == true) {
+      setPosts((current) => current.filter((item) => item._id != postData._id));
+    }
+  }
+
+  async function editPost() {
+    const token = localStorage.getItem("token");
+
+    const data = await fetch(`http://localhost:3000/api/post/${postData._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ content: postContent }),
+    }).then((res) => res.json());
+
+    console.log(data);
+
+    if (data.success == true) {
+      setEdit(false);
     }
   }
 
@@ -75,7 +130,31 @@ export default function Post({
             alt=""
           />
         </Link>
-        <div className="flex w-full">
+        <div className="relative flex w-full">
+          {options == true ? (
+            <div className="bg-stone-900 rounded-md p-2 mt-5 w-32 flex flex-col absolute right-0">
+              <button
+                onClick={() => {
+                  setEdit(true);
+                  setOptions(false);
+                }}
+                className="text-start rounded-md hover:bg-stone-800 p-1 px-2"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => {
+                  deletePost();
+                  setOptions(false);
+                }}
+                className="text-start rounded-md hover:bg-stone-800 p-1 px-2"
+              >
+                Delete
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="flex-grow">
             <Link href={`/profile/${postUser.url_handle}`}>
               <p className="text-sm">{postUser.username}</p>
@@ -85,12 +164,62 @@ export default function Post({
             </p>
           </div>
           <div>
-            <button>more</button>
+            {user?.id != postUser._id ? (
+              <></>
+            ) : (
+              <button
+                onClick={() => {
+                  if (options == true) {
+                    setOptions(false);
+                  } else {
+                    setOptions(true);
+                  }
+                }}
+              >
+                <img
+                  className="w-6 h-6"
+                  src="/dots-horizontal.svg"
+                  alt="more"
+                />
+              </button>
+            )}
           </div>
         </div>
       </div>
-      <div>
-        <p>{postData.content}</p>
+      <div className="flex flex-col gap-2">
+        {edit == true ? (
+          <>
+            <textarea
+              style={{ outline: "none" }}
+              value={postContent}
+              onChange={(e) => setPostContent(e.target.value)}
+              className="w-full bg-inherit resize-none border border-stone-700 rounded-md p-2"
+            ></textarea>
+            <div className="flex w-full justify-center gap-4">
+              <button
+                disabled={postContent.length == 0 ? true : false}
+                onClick={editPost}
+                className="self-center disabled:bg-stone-600 bg-sky-600 p-2 rounded-md"
+              >
+                Save Changes
+              </button>
+              <button
+                onClick={() => setEdit(false)}
+                className="bg-stone-600 p-2 rounded-md"
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        ) : (
+          <pre
+            style={{
+              fontFamily: `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`,
+            }}
+          >
+            {he.decode(postContent)}
+          </pre>
+        )}
       </div>
       <div className="flex">
         {likesPost != 0 ? (
@@ -131,32 +260,13 @@ export default function Post({
       <div className="flex flex-col gap-2">
         {postComments.map((item) => {
           return (
-            <div key={item._id} className="flex gap-2">
-              <Link href={`/profile/${item.user.url_handle}`}>
-                <img
-                  src={`${item.user.profile_picture_url}`}
-                  className="w-10 h-10 rounded-full"
-                  alt=""
-                />
-              </Link>
-              <div>
-                <div className="flex flex-col bg-stone-700 px-3 py-1 rounded-2xl">
-                  <Link href={`/profile/${item.user.url_handle}`}>
-                    <p className="text-xs font-bold">{item.user.username}</p>
-                  </Link>
-                  <p className="text-sm">{item.content}</p>
-                </div>
-                <div className="flex gap-3">
-                  <p className="text-xs">Like</p>
-                  <p className="text-xs">Reply</p>
-                  <p className="text-xs">
-                    {formatDistance(new Date(item.commented_on), new Date(), {
-                      addSuffix: true,
-                    })}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <Comment
+              currentUser={user}
+              user={item.user}
+              comment={item}
+              setComments={setPostComments}
+              postComments={postComments}
+            />
           );
         })}
         <div className="flex gap-2">
