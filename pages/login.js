@@ -2,8 +2,13 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Footer from "@/components/Footer";
 import Head from "next/head";
+import Link from "next/link";
 
-export default function Login() {
+Login.getInitialProps = ({ query }) => {
+  return { query };
+};
+
+export default function Login({ query }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -13,6 +18,7 @@ export default function Login() {
 
   async function logIn(e) {
     e.preventDefault();
+    console.log("hi");
 
     const bodyData = {
       email: email,
@@ -21,11 +27,16 @@ export default function Login() {
 
     const data = await fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
+      credentials: "include",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "http://localhost:3001",
       },
       body: JSON.stringify(bodyData),
     }).then((res) => res.json());
+
+    console.log(data);
 
     if (data.code == 400) {
       setError(true);
@@ -34,14 +45,16 @@ export default function Login() {
       setError(false);
     }
 
-    localStorage.setItem("token", data.token);
-    router.push("/");
+    if (data.success == true) {
+      localStorage.setItem("token", data.token);
+      router.push("/");
+    }
   }
 
   return (
     <div className="flex flex-col h-screen">
       <Head>
-        <title>Profile</title>
+        <title>Login - OdinBook</title>
       </Head>
       <main className="px-8 lg:mx-0 flex-grow bg-gray-100 flex-col flex lg:flex-row justify-center md:items-center gap-4 lg:gap-24">
         <div>
@@ -51,6 +64,13 @@ export default function Login() {
           </p>
         </div>
         <div className="bg-white p-4 rounded-md w-full md:w-80 shadow-lg">
+          {query ? (
+            <p className="mb-2 text-center font-bold">
+              {JSON.stringify(query.message)}
+            </p>
+          ) : (
+            <></>
+          )}
           {error == true ? (
             <p className="text-red-400 text-center mb-2 font-bold">
               {errorMessage}
@@ -103,7 +123,7 @@ export default function Login() {
           <hr />
           <div className="flex justify-center">
             <button className="w-1/2 mt-4 bg-green-500 py-2 rounded-md">
-              Create account
+              <Link href={`/signup`}>Create account</Link>
             </button>
           </div>
         </div>

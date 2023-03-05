@@ -1,11 +1,13 @@
 import Head from "next/head";
-import NotLoggedMainPage from "@/components/LogIn";
 import { useEffect, useState } from "react";
 import Homepage from "@/components/Homepage";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [logged, setLogged] = useState();
   const [user, setUser] = useState();
+
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
@@ -24,6 +26,7 @@ export default function Home() {
       }).then((res) => res.json());
 
       if (data.code == 400) {
+        router.push("/login");
         setLogged(false);
       } else {
         localStorage.setItem("id", data.user.id);
@@ -44,7 +47,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {logged == false ? <Login /> : <Homepage user={user} />}
+      {logged == false ? <></> : <Homepage user={user} />}
     </div>
   );
 }
