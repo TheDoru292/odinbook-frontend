@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const backendURL = "https://odinbook-backend-iccv.onrender.com";
+const backendURL = "https://odinbook-backend-zoih.onrender.com";
 
 export const registerUser = createAsyncThunk(
   "auth/register",

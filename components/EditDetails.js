@@ -17,7 +17,7 @@ export default function EditDetails({ user, close }) {
     };
 
     const data = await fetch(
-      `https://odinbook-backend-iccv.onrender.com/api/user/${id}`,
+      `https://odinbook-backend-zoih.onrender.com/api/user/${id}`,
       {
         method: "PUT",
         headers: {

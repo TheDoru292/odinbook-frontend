@@ -25,7 +25,7 @@ export default function Post({
     const token = localStorage.getItem("token");
 
     const data = await fetch(
-      `https://odinbook-backend-iccv.onrender.com/api/post/${postData._id}/like`,
+      `https://odinbook-backend-zoih.onrender.com/api/post/${postData._id}/like`,
       {
         method: "POST",
         headers: {
@@ -53,7 +53,7 @@ export default function Post({
       const token = localStorage.getItem("token");
 
       const data = await fetch(
-        `https://odinbook-backend-iccv.onrender.com/api/post/${postData._id}/comment`,
+        `https://odinbook-backend-zoih.onrender.com/api/post/${postData._id}/comment`,
         {
           method: "POST",
           headers: {
@@ -87,7 +87,7 @@ export default function Post({
     const token = localStorage.getItem("token");
 
     const data = await fetch(
-      `https://odinbook-backend-iccv.onrender.com/api/post/${postData._id}`,
+      `https://odinbook-backend-zoih.onrender.com/api/post/${postData._id}`,
       {
         method: "DELETE",
         headers: {
@@ -108,7 +108,7 @@ export default function Post({
     const token = localStorage.getItem("token");
 
     const data = await fetch(
-      `https://odinbook-backend-iccv.onrender.com/api/post/${postData._id}`,
+      `https://odinbook-backend-zoih.onrender.com/api/post/${postData._id}`,
       {
         method: "PUT",
         headers: {

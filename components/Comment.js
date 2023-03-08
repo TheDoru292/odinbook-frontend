@@ -17,7 +17,7 @@ export default function Comment({
     const token = localStorage.getItem("token");
 
     const data = await fetch(
-      `https://odinbook-backend-iccv.onrender.com/api/post/${comment.post}/comment/${comment._id}`,
+      `https://odinbook-backend-zoih.onrender.com/api/post/${comment.post}/comment/${comment._id}`,
       {
         method: "DELETE",
         headers: {
@@ -38,7 +38,7 @@ export default function Comment({
         const token = localStorage.getItem("token");
 
         const data = await fetch(
-          `https://odinbook-backend-iccv.onrender.com/api/post/${comment.post}/comment/${comment._id}`,
+          `https://odinbook-backend-zoih.onrender.com/api/post/${comment.post}/comment/${comment._id}`,
           {
             method: "PUT",
             headers: {

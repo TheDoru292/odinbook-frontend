@@ -8,7 +8,7 @@ export default function CreatePost({ closePost, username, profilePic }) {
     const token = localStorage.getItem("token");
 
     const data = await fetch(
-      "https://odinbook-backend-iccv.onrender.com/api/post",
+      "https://odinbook-backend-zoih.onrender.com/api/post",
       {
         method: "POST",
         headers: {
